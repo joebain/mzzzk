@@ -6,15 +6,12 @@ var _ = require("lodash");
 
 var env = require("./env.json");
 
-var songRoutes = require("./routes/songs");
 var scannerRoutes = require("./routes/scanner");
 
 var app = koa();
 
 app.use(router(app));
 
-app.get("/songs", songRoutes.getSongs);
-app.get("/songs/:id", songRoutes.getSong);
 app.get("/scan", scannerRoutes.scan);
 
 var readFile = function(path, encoding) {
