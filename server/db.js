@@ -1,15 +1,74 @@
-//var mongo = require("mongodb");
-//var co = require('co');
-//var comongo = require('co-mongo');
+var env = require("./env.json");
+var couchdb = require("node-couchdb");
+var _ = require("lodash");
 
-//var server = new mongo.Server('localhost', 27017, {auto_reconnect: true});
-//module.exports = new mongo.Db('mzzzk', server, {w: 1});
+var couch = new couchdb(env.db.host, env.db.port);
 
-module.exports = {
-	url: 'mongodb://127.0.0.1:27017/mzzzk'
-};
+var createViews = function() {
+    var designName = "_design/songs";
+    var views = {};
+    _.each(["title", "filehash", "taghash", "album", "artist"], function(prop) {
+        views["by-" + prop] = {
+            map: (function(doc) {
+                if (doc.type === "song" && doc["__prop"]) {
+                    emit(doc["__prop"], doc);
+                }
+            }).toString().replace(/__prop/g, prop)
+        }
+    });
+    _.each(["artist", "album"], function(prop) {
+        views[prop] = {
+            map: (function(doc) {
+                if (doc.type === "song" && doc["__prop"]) {
+                    emit(doc["__prop"], 1);
+                }
+            }).toString().replace(/__prop/g, prop),
+            reduce: (function(keys, values) {
+                return sum(values);
+            }).toString()
+        }
+    });
+    var doInsertViews = function() {
+        couch.insert(env.db.name, {
+            _id: designName,
+            views: views
+        }, function(err, res) {
+            if (err) throw "Error inserting views: " + err;
+        });
+    };
+    couch.rawGet(env.db.name, designName, function(err, res) {
+        if (err) throw "Error getting views: " + err;
 
-//module.exports = co(function *() {
-//  yield comongo.connect(url);
-//})();
+        if (res && res.data.views) {
+            couch.del(env.db.name, designName, res.data._rev, function(err, res) {
+                if (err) throw "Error deleting views: " + err;
 
+                doInsertViews();
+            });
+        } else {
+            doInsertViews();
+        }
+    });
+}
+
+couch.rawGet(env.db.name, "", function(err, res) {
+    if (err) throw "Error getting database: " + err;
+
+    if (res) {
+        if (res.status === 200) {
+            createViews();
+        } else if (res.status === 404) {
+            couch.createDatabase(env.db.name, function(err) {
+                if (err) throw "Error creating database! " + err;
+
+                createViews();
+            });
+        } else {
+            throw "Error creating database! " + JSON.stringify(res);
+        }
+    } else {
+        throw "Error creating database! No response from server.";
+    }
+});
+
+module.exports = couch;

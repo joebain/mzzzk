@@ -25,6 +25,7 @@
     "koa": "^0.8.1",
     "kue": "^0.8.3",
     "mustache": "~0.8.2",
+    "node-couchdb": "^0.2.2",
     "through2": "~0.5.1",
     "underscore": "~1.6.0"
   },

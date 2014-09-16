@@ -1,10 +1,12 @@
 var _ = require("lodash");
 var fs = require("fs");
 var thunkify = require("thunkify");
+var path = require("path");
 
-var db = require("./db");
-var comongo = require('co-mongo');
 var taglib = require("taglib");
+
+var couch = require("./db");
+var env = require("./env.json");
 
 
 var FileMonitor = function(rootPath) {
@@ -20,8 +22,13 @@ _.extend(FileMonitor.prototype, {
 				throw "Already scanning.";
 			} else {
 				this.scanning = true;
+                this.scanCount = 0;
 			}
-		}
+		} else {
+            if (!this.scanning) {
+                return;
+            }
+        }
 		dir[dir.length-1] === "/" || (dir += "/");
 		var files = yield thunkify(fs.readdir)(dir);
 		for (var f = 0 ; f < files.length ; f++) {
@@ -33,42 +40,49 @@ _.extend(FileMonitor.prototype, {
 			} else if (stats.isFile()) {
 				console.log(fileName);
 				if (fileName.match(/\.(?:mp3|ogg|wma|wav|m4a|oga|aac)$/)) {
-					var con = yield comongo.connect(db.url);
+                    if (!this.scanning) {
+                        return;
+                    }
+                    this.scanCount++;
+                    var stat = yield thunkify(fs.stat)(filePath);
 					var tag = yield thunkify(taglib.tag)(filePath);
-					console.log("got metadata");
-					console.log(tag);
-					if (tag && tag.artist && tag.title) {
-						var songs = yield con.collection("songs");
-						console.log("inserting song");
-						var song = yield songs.findOne(tag);
-						if (!song) {
-							yield songs.insert(tag);
-						}
-						var albums = yield con.collection("albums");
-						var album = yield albums.findOne({title: tag.album});
-						if (!album) {
-							yield albums.insert({
-								title: tag.album,
-								artist: tag.artist,
-								year: tag.year
-							});
-						}
-						var artists = yield con.collection("artists");
-						var artist = yield artists.findOne({name: tag.artist});
-						if (!artist) {
-							yield artists.insert({
-								name: tag.artist
-							});
-						}
-					}
-					yield con.close();
+                    tag || (tag = {});
+                    tag.type = "song";
+                    tag.title || (tag.title = path.basename(fileName, path.extname(fileName)));
+                    tag.album || (tag.album = path.basename(path.dirname(filePath)));
+                    tag.src = filePath;
+                    tag.size = stat.size;
+                    tag.filehash = tag.size + " - " + tag.src;
+                    tag.taghash = tag.artist + " - " + tag.album + " - " + tag.track + " - " + tag.title;
+
+                    var songs = yield couch.rawGet.bind(couch, env.db.name, "_design/songs/_view/by-filehash", {key: tag.filehash});
+                    if (!songs || songs.data.rows.length === 0) {
+                        console.log("inserting song");
+                        tag._id = (yield couch.uniqid.bind(couch, 1))[0];
+                        yield couch.insert.bind(couch, env.db.name, tag);
+                        console.log("inserted song");
+                    } else {
+                        console.log("song already in db");
+                        songData = songs.data.rows[0].value;
+                        if (tag.taghash !== songData.taghash || tag.filehash !== songData.filehash) {
+                            console.log("hashes have changed, updating");
+                            tag._id = songData._id;
+                            tag._rev = songData._rev;
+                            yield couch.update.bind(couch, env.db.name, tag);
+                        }
+                    }
 				}
 			}
 		}
 		if (dir === this.root) { 
+            console.log("finished scan");
 			this.scanning = false;
 		}
-	}
+	},
+
+    stop: function() {
+        this.scanning = false;
+    }
 });
 
 module.exports = FileMonitor;
