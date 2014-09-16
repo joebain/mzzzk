@@ -5,9 +5,10 @@ var sass = require('gulp-sass');
 var notify = require('gulp-notify');
 var gulpif = require('gulp-if');
 var sprite = require('css-sprite').stream;
+var nodemon = require('gulp-nodemon');
 
-var isDevelopment = (process.env.NODE_ENV || "dev") === "dev";
-var buildDir = isDevelopment ? "build/dev" : "build/prod";
+var isDevelopment = (process.env.NODE_ENV || "development") === "development";
+var buildDir = isDevelopment ? "build/development" : "build/production";
 
 gulp.task('script', function() {  
 	return gulp.src(['script/main.js'])
@@ -51,10 +52,14 @@ gulp.task('html', function() {
 
 gulp.task('build', ['style', 'script', 'html']);
 
-gulp.task('watch', function() {
+gulp.task('watch', ['build'], function() {
 	gulp.watch('script/**/*.js', ['script']);
 	gulp.watch('templ/*.hbs', ['script']);
 	gulp.watch('style/*.scss', ['style']);
 	gulp.watch('img/*.png', ['sprite', 'style']);
 	gulp.watch('index.html', ['html']);
 });
+
+gulp.task('serve', ['watch'], function () {
+  nodemon({ watch: ['server/'], script: 'server/app.js', ext: 'html js hbs scss png', nodeArgs: ["--harmony"] })
+})
