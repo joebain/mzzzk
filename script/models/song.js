@@ -1,8 +1,7 @@
 var Backbone = require("backbone");
+require("couchback");
 
-var CouchModel = require("./couch-model");
-
-var Song = CouchModel.extend({
+var Song = Backbone.Couch.Model.extend({
 });
 
 module.exports = Song;

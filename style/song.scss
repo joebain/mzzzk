@@ -8,6 +8,7 @@
     .mk-song-track,
     .mk-song-title {
         display: table-cell;
+        padding: 5px 0px;
 
         &[contenteditable] {
             color: $colour-secondary-1-0;

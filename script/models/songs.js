@@ -1,8 +1,9 @@
 var Backbone = require("backbone");
-var Song = require("./song");
-var CouchCollection = require("./couch-collection");
+require("couchback");
 
-var Songs = CouchCollection.extend({
+var Song = require("./song");
+
+var Songs = Backbone.Couch.Collection.extend({
     model: Song,
 
     couch_host: "localhost:5984",
