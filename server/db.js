@@ -11,7 +11,7 @@ var createViews = function() {
         views["by-" + prop] = {
             map: (function(doc) {
                 if (doc.type === "song" && doc["__prop"]) {
-                    emit(doc["__prop"], doc);
+                    emit(doc["__prop"], null);
                 }
             }).toString().replace(/__prop/g, prop)
         }

@@ -1,0 +1,26 @@
+@import "colours";
+
+.mk-songs {
+    margin: 10px 10px;
+    display: table;
+
+    .mk-songs-header {
+        display: table-row;
+
+        .mk-song-header-artist,
+        .mk-song-header-album,
+        .mk-song-header-track,
+        .mk-song-header-title {
+            display: table-cell;
+            text-align: left;
+            font-weight: normal;
+            font-size: 24px;
+            font-style: italic;
+            padding-right: 10px;
+        }
+    }
+    .mk-songs-song-list {
+        display: table-row-group;
+    }
+}
+

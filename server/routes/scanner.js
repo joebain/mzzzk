@@ -9,7 +9,7 @@ module.exports = {
         } else {
             try {
                 yield fm.scan();
-                this.data = {status: "Sucess"};
+                this.data = {status: "Success"};
             } catch (e) {
                 fm.stop();
                 this.data = {error: "Error scanning", detail: e};

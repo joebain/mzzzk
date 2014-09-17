@@ -5,11 +5,17 @@ Backbone.$ = $;
 var template = require("../../templ/app.hbs");
 
 var AppView = Backbone.View.extend({
-	initialize: function() {
+    el: "body",
+
+	initialize: function(options) {
+        this.songsView = options.songsView;
 	},
 
 	render: function() {
 		this.el.innerHTML = template();
+
+        this.contentEl = this.$el.find(".mk-app-content");
+        this.contentEl.append(this.songsView.$el);
 	}
 });
 

@@ -3,10 +3,18 @@ var $ = require("jquery");
 Backbone.$ = $;
 
 var AppView = require("./views/app");
+var SongsView = require("./views/songs");
+
+var Songs = require("./models/songs");
 
 $(function() {
-	var appView = new AppView({el: "body"});
+    var songs = new Songs();
+    var songsView = new SongsView({collection: songs});
+
+	var appView = new AppView({songsView: songsView});
 	appView.render();
+
+    songs.fetch();
 
 	Backbone.history.start();
 });

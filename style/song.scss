@@ -1,0 +1,32 @@
+@import "colours";
+
+.mk-song {
+    display:table-row;
+
+    .mk-song-artist,
+    .mk-song-album,
+    .mk-song-track,
+    .mk-song-title {
+        display: table-cell;
+
+        &[contenteditable] {
+            color: $colour-secondary-1-0;
+            background-color: $colour-secondary-1-1;
+        }
+    }
+
+    .mk-song-edit-toggle,
+    .mk-song-save,
+    .mk-song-delete {
+        cursor: pointer;
+        margin: 0px 3px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &:nth-child(odd) {
+        background-color: rgba(255,255,255,0.05);
+    }
+}
