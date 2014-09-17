@@ -8,7 +8,7 @@ var CouchModel = Backbone.Model.extend({
     },
 
     url: function() {
-        return "//" + this.colllection.couch_host + "/" + this.collection.couch_name + "/" + this.id;
+        return "//" + this.collection.couch_host + "/" + this.collection.couch_name + "/" + this.id;
     },
 
     sync: function(method, model, options) {
