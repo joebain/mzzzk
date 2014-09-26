@@ -1,0 +1,13 @@
+@import "constants";
+
+@mixin mobile {
+  @media (max-width: $max-mobile-width) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $max-mobile-width) {
+    @content;
+  }
+}

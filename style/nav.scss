@@ -1,0 +1,16 @@
+@import "colours";
+
+.mk-nav {
+    .mk-nav-link {
+        display: block;
+        font-size: 26px;
+        text-decoration: none;
+        color: $colour-primary-1;
+        margin: -5px 3px;
+
+        i:before {
+            font-size: 60px;
+            vertical-align: middle;
+        }
+    }
+}

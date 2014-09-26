@@ -1,0 +1,118 @@
+@font-face {
+	font-family: "Flaticon";
+	src: url("flaticon.eot");
+	src: url("flaticon.eot#iefix") format("embedded-opentype"),
+	url("flaticon.woff") format("woff"),
+	url("flaticon.ttf") format("truetype"),
+	url("flaticon.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+	font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
+}.flaticon-african4:before {
+	content: "\e000";
+}
+.flaticon-axe4:before {
+	content: "\e001";
+}
+.flaticon-box40:before {
+	content: "\e002";
+}
+.flaticon-chopped1:before {
+	content: "\e003";
+}
+.flaticon-circular84:before {
+	content: "\e004";
+}
+.flaticon-cockroach1:before {
+	content: "\e005";
+}
+.flaticon-curved13:before {
+	content: "\e006";
+}
+.flaticon-cylindrical6:before {
+	content: "\e007";
+}
+.flaticon-drop14:before {
+	content: "\e008";
+}
+.flaticon-feline4:before {
+	content: "\e009";
+}
+.flaticon-fishing9:before {
+	content: "\e00a";
+}
+.flaticon-hanging6:before {
+	content: "\e00b";
+}
+.flaticon-kitchen18:before {
+	content: "\e00c";
+}
+.flaticon-knife11:before {
+	content: "\e00d";
+}
+.flaticon-knife12:before {
+	content: "\e00e";
+}
+.flaticon-leaf34:before {
+	content: "\e00f";
+}
+.flaticon-leaf35:before {
+	content: "\e010";
+}
+.flaticon-light55:before {
+	content: "\e011";
+}
+.flaticon-matchstick1:before {
+	content: "\e012";
+}
+.flaticon-metal3:before {
+	content: "\e013";
+}
+.flaticon-mountains3:before {
+	content: "\e014";
+}
+.flaticon-mushroom7:before {
+	content: "\e015";
+}
+.flaticon-musical58:before {
+	content: "\e016";
+}
+.flaticon-oil7:before {
+	content: "\e017";
+}
+.flaticon-oval6:before {
+	content: "\e018";
+}
+.flaticon-plant25:before {
+	content: "\e019";
+}
+.flaticon-plant26:before {
+	content: "\e01a";
+}
+.flaticon-rectangular44:before {
+	content: "\e01b";
+}
+.flaticon-rope2:before {
+	content: "\e01c";
+}
+.flaticon-skull17:before {
+	content: "\e01d";
+}
+.flaticon-sling1:before {
+	content: "\e01e";
+}
+.flaticon-spear1:before {
+	content: "\e01f";
+}
+.flaticon-vacuum5:before {
+	content: "\e020";
+}
+.flaticon-zigzag4:before {
+	content: "\e021";
+}

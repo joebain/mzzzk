@@ -50,7 +50,12 @@ gulp.task('html', function() {
 	.pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build', ['style', 'script', 'html']);
+gulp.task('font', function() {
+	return gulp.src('font/**/*')
+	.pipe(gulp.dest(buildDir + "/font"));
+});
+
+gulp.task('build', ['style', 'script', 'html', 'font']);
 
 gulp.task('watch', ['build'], function() {
 	gulp.watch('script/**/*.js', ['script']);
@@ -61,5 +66,5 @@ gulp.task('watch', ['build'], function() {
 });
 
 gulp.task('serve', ['watch'], function () {
-  nodemon({ watch: ['server/'], script: 'server/app.js', ext: 'html js hbs scss png', nodeArgs: ["--debug", "--harmony"] })
+  nodemon({ watch: ['server/'], script: 'server/app.js', ext: 'html js hbs scss png', nodeArgs: [/*"--debug", */"--harmony"] })
 })

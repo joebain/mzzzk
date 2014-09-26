@@ -1,8 +1,13 @@
 @import "colours";
+@import "constants";
+@import "util";
 
 .mk-app {
   background-color: $colour-primary-0;
   color: $colour-primary-1;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 
   font-family: Ubuntu;
 
@@ -17,5 +22,33 @@
       font-size:40px;
       margin-left: -15px;
     }
+  }
+
+  @include mobile {
+      .mk-app-nav {
+      }
+
+      .mk-app-content {
+      }
+  }
+
+  @include desktop {
+      .mk-app-nav {
+          position:absolute;
+
+          top: $header-full-height;
+          bottom: 0;
+          left: 0;
+          width: $nav-bar-width;
+      }
+
+      .mk-app-content {
+          position:absolute;
+
+          top: $header-full-height;
+          bottom: 0;
+          right: 0;
+          left: $nav-bar-width;
+      }
   }
 }

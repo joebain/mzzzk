@@ -1,8 +1,14 @@
 @import "colours";
 
 .mk-songs {
-    margin: 10px 10px;
-    display: table;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
     .mk-songs-header {
         display: table-row;
