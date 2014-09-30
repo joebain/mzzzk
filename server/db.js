@@ -7,6 +7,7 @@ var couch = new couchdb(env.db.host, env.db.port);
 var createViews = function() {
     var designName = "_design/songs";
     var views = {};
+    var lists = {};
     _.each(["title", "filehash", "taghash", "album", "artist"], function(prop) {
         views["by-" + prop] = {
             map: (function(doc) {
@@ -16,22 +17,48 @@ var createViews = function() {
             }).toString().replace(/__prop/g, prop)
         }
     });
-    _.each(["artist", "album"], function(prop) {
-        views[prop] = {
+    var sub_queries = [["artist", "album"], ["album", "artist"]];
+    _.each(sub_queries, function(prop) {
+        views[prop[0]] = {
             map: (function(doc) {
-                if (doc.type === "song" && doc["__prop"]) {
-                    emit(doc["__prop"], 1);
+                if (doc.type === "song" && doc.__key) {
+                    emit([doc.__key, doc.__sub], {count: 1});
                 }
-            }).toString().replace(/__prop/g, prop),
-            reduce: (function(keys, values) {
-                return sum(values);
-            }).toString()
+            }).toString().replace(/__key/g, prop[0]).replace(/__sub/g, prop[1]),
+            reduce: "_count"
         }
     });
+    lists["group-2"] = (function(head, req) {
+      var row = getRow(), last_key = row.key[0], list = [row.key[1]], count = row.value;
+      send("[");
+        while (row = getRow()) {
+          if (last_key != row.key[0]) {
+            var toSend = {};
+            toSend.key = last_key;
+            toSend.values = list;
+            toSend.count = count;
+            send(toJSON(toSend));
+            send(",\n");
+
+            last_key = row.key[0];
+            list = []
+            count = 0;
+          }
+          list.push(row.key[1]);
+          count += row.value;
+        }
+        var toSend = {};
+        toSend.key = last_key;
+        toSend.values = list;
+        toSend.count = count;
+        send(toJSON(toSend));
+        send("]");
+    }).toString();
     var doInsertViews = function() {
         couch.insert(env.db.name, {
             _id: designName,
-            views: views
+            views: views,
+            lists: lists
         }, function(err, res) {
             if (err) throw "Error inserting views: " + err;
         });

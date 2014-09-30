@@ -9,10 +9,9 @@
   "author": "Joe Bain",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "CouchBack": "git://github.com/joebain/couchback",
     "backbone": "~1.1.2",
     "browserify": "~5.0.8",
-    "couchback": "git://github.com/joebain/couchback",
+    "couchback": "^0.1.0",
     "css-sprite": "~0.7.0-beta3",
     "gulp": "~3.8.6",
     "gulp-browserify": "~0.5.0",

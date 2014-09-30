@@ -1,11 +1,14 @@
 var Backbone = require("backbone");
 
+var Postman = require("../postman");
+
 var template = require("../../templ/song.hbs");
 
 var SongView = Backbone.View.extend({
     className: "mk-song",
 
     events: {
+        "click": "playSong",
         "click .mk-song-edit-toggle": "toggleEditMode",
         "click .mk-song-save": "save",
         "click .mk-song-delete": "delete"
@@ -21,6 +24,10 @@ var SongView = Backbone.View.extend({
         var data = this.model.toJSON();
         data.editMode = this.editMode;
         this.el.innerHTML = template(data);
+    },
+
+    playSong: function() {
+      Postman.trigger("player:setSong", this.model);
     },
 
     toggleEditMode: function() {

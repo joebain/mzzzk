@@ -1,6 +1,7 @@
 var FileMonitor = require("../file-monitor.js");
+var env = require("../env.json");
 
-var fm = new FileMonitor("/home/joe/Music");
+var fm = new FileMonitor(env.music_dir);
 
 module.exports = {
 	scan: function *(next) {

@@ -1,0 +1,40 @@
+.mk-song-block {
+  height: 200px;
+  width: 200px;
+  display: inline-block;
+  box-shadow: 0px 3px 5px rgba(0,0,0,0.3);
+  margin: 20px;
+  background-color: rgb(255,255,255);
+  vertical-align: top;
+
+  text-decoration: none;
+  color: $colour-primary-1;
+
+  position: relative;
+
+  .mk-block-title {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    top: 0;
+    overflow: hidden;
+    word-break: break-all;
+  }
+
+  .mk-block-sub-title {
+    position: absolute;
+    bottom: 20px;
+    left: 0px;
+    overflow: hidden;
+    word-break: break-all;
+    top: 150px;
+    font-size: 30px;
+  }
+
+  .mk-block-count {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

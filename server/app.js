@@ -14,6 +14,10 @@ var app = koa();
 app.use(router(app));
 
 app.get("/", appRoutes.home);
+app.get("/album", appRoutes.home);
+app.get("/song", appRoutes.home);
+app.get("/artist", appRoutes.home);
+
 app.get("/scan", scannerRoutes.scan);
 
 var readFile = function(path, encoding) {
@@ -39,6 +43,7 @@ app.use(function *(next) {
 });
 
 app.use(serve(env.root));
+app.use(serve(env.music_dir));
 
 app.use(function *(next) {
     this.status = 404;

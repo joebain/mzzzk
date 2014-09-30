@@ -50,7 +50,7 @@ _.extend(FileMonitor.prototype, {
                     tag.type = "song";
                     tag.title || (tag.title = path.basename(fileName, path.extname(fileName)));
                     tag.album || (tag.album = path.basename(path.dirname(filePath)));
-                    tag.src = filePath;
+                    tag.src = path.relative(this.root, filePath);
                     tag.size = stat.size;
                     tag.filehash = tag.size + " - " + tag.src;
                     tag.taghash = tag.artist + " - " + tag.album + " - " + tag.track + " - " + tag.title;

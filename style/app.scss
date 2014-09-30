@@ -22,6 +22,11 @@
       font-size:40px;
       margin-left: -15px;
     }
+
+    .mk-app-player {
+      display: inline-block;
+      vertical-align: top;
+    }
   }
 
   @include mobile {
@@ -49,6 +54,8 @@
           bottom: 0;
           right: 0;
           left: $nav-bar-width;
+
+          overflow: auto;
       }
   }
 }
