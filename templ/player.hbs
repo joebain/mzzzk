@@ -1,10 +1,13 @@
-<audio class="mk-song" src="{{src}}"></audio>
+<audio class="mk-song" src="/{{song.src}}"></audio>
 <div class="mk-player-row-top">
-<div class="mk-song-title">{{title}}</div> -
-<div class="mk-song-artist">{{artist}}</div>
+<div class="mk-song-artist">{{song.artist}}</div> -
+<div class="mk-song-title">{{song.title}}</div>
 </div>
 <div class="mk-player-row-bottom">
 <div class="mk-prev-button">Prev</div>
 <div class="mk-play-button">Play</div>
 <div class="mk-next-button">Next</div>
+{{#if count}}
+<a class="mk-song-count" href="/queue">{{count}}</a>
+{{/if}}
 </div>

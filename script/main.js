@@ -25,11 +25,16 @@ $(function() {
     var albumsView = new SongBlocksView({blocks: albums});
     var artistsView = new SongBlocksView({blocks: artists});
 
+    var detailSongs = new Songs();
+    var detailSongsView = new SongsView({collection: detailSongs});
+
     var navView = new NavView();
 
     var router = new Router();
 
     var playerView = new PlayerView();
+
+    var queueView = new SongsView;
 
 
 	var appView = new AppView({
@@ -38,7 +43,10 @@ $(function() {
         songsView: songsView,
         artistsView: artistsView,
         albumsView: albumsView,
-        playerView: playerView
+        playerView: playerView,
+        detailSongsView: detailSongsView,
+        detailSongs: detailSongs,
+        queueView: queueView
     });
 	appView.render();
 

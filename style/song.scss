@@ -2,13 +2,14 @@
 
 .mk-song {
     display:table-row;
+    cursor: pointer;
 
     .mk-song-artist,
     .mk-song-album,
     .mk-song-track,
     .mk-song-title {
         display: table-cell;
-        padding: 5px 0px;
+        padding: 5px;
 
         &[contenteditable] {
             color: $colour-secondary-1-0;

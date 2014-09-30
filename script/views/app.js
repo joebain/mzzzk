@@ -15,7 +15,11 @@ var AppView = Backbone.View.extend({
         this.artistsView = options.artistsView;
         this.navView = options.navView;
 
+        this.detailSongsView = options.detailSongsView;
+        this.detailSongs = options.detailSongs;
+
         this.playerView = options.playerView;
+        this.queueView = options.queueView;
 
         this.currentListView = this.albumsView;
 
@@ -23,33 +27,57 @@ var AppView = Backbone.View.extend({
 
         this.pageMap = {
             "songs": this.songsView,
-            "artists": this.artistsView,
-            "albums": this.albumsView
+            "artist": this.artistsView,
+            "album": this.albumsView,
+            "queue": this.queueView
         };
 	},
 
-    onRoute: function(url) {
-        var slashI = url.indexOf("/");
-        var page = slashI > 0 ? url.substr(0, slashI) : url;
-        var view = this.pageMap[page];
+    onRoute: function(page, args) {
+        var item = args && args[0];
+        var view;
+        if (item) {
+            view = this.detailSongsView;
+        } else {
+            view = this.pageMap[page];
+        }
         if (view) {
             this.currentListView = view;
+
+            if (item) {
+                this.detailSongs.reset();
+                this.detailSongs.fetch({key: page, value: item});
+            }
+            if (page === "queue") {
+                this.queueView.setCollection(this.playerView.collection);
+            }
+
             view.render();
             this.render();
         }
     },
 
 	render: function() {
-		this.el.innerHTML = template();
+        if (this.el.innerHTML.trim().length === 0) {
+            this.el.innerHTML = template();
+        }
 
-        this.contentEl = this.$el.find(".mk-app-content");
+        if (!this.contentEl) {
+            this.contentEl = this.$el.find(".mk-app-content");
+        } else {
+            this.contentEl.empty();
+        }
         this.contentEl.append(this.currentListView.$el);
 
-        this.navEl = this.$el.find(".mk-app-nav");
-        this.navEl.append(this.navView.$el);
+        if (!this.navEl) {
+            this.navEl = this.$el.find(".mk-app-nav");
+            this.navEl.append(this.navView.$el);
+        }
 
-        this.playerEl = this.$el.find(".mk-app-player");
-        this.playerEl.append(this.playerView.$el);
+        if (!this.playerEl) {
+            this.playerEl = this.$el.find(".mk-app-player");
+            this.playerEl.append(this.playerView.$el);
+        }
 	}
 });
 

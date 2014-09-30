@@ -8,10 +8,10 @@ var SongView = Backbone.View.extend({
     className: "mk-song",
 
     events: {
-        "click": "playSong",
         "click .mk-song-edit-toggle": "toggleEditMode",
         "click .mk-song-save": "save",
-        "click .mk-song-delete": "delete"
+        "click .mk-song-delete": "delete",
+        "click": "playSong"
     },
 
     initialize: function() {
@@ -27,15 +27,18 @@ var SongView = Backbone.View.extend({
     },
 
     playSong: function() {
+      Postman.trigger("player:setCollection", this.model.collection);
       Postman.trigger("player:setSong", this.model);
     },
 
-    toggleEditMode: function() {
+    toggleEditMode: function(e) {
         this.editMode = !this.editMode;
         this.render();
+
+        return false;
     },
 
-    save: function() {
+    save: function(e) {
         if (this.editMode) {
             this.model.save({
                 title: this.$el.find(".mk-song-title").html(),
@@ -46,11 +49,15 @@ var SongView = Backbone.View.extend({
             this.editMode = false;
             this.render();
         }
+
+        return false;
     },
 
-    delete: function() {
+    delete: function(e) {
         this.model.destroy();
         this.$el.remove();
+
+        return false;
     }
 });
 

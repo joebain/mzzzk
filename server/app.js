@@ -13,12 +13,19 @@ var app = koa();
 
 app.use(router(app));
 
-app.get("/", appRoutes.home);
-app.get("/album", appRoutes.home);
-app.get("/song", appRoutes.home);
-app.get("/artist", appRoutes.home);
-
 app.get("/scan", scannerRoutes.scan);
+
+app.get("/", appRoutes.home);
+app.get("/artist", appRoutes.home);
+app.get("/artist/:artist", appRoutes.home);
+app.get("/album", appRoutes.home);
+app.get("/album/:album", appRoutes.home);
+app.get("/songs", appRoutes.home);
+app.get("/queue", appRoutes.home);
+app.get("/recent", appRoutes.home);
+app.get("/playlist", appRoutes.home);
+app.get("/playlist/:playlist", appRoutes.home);
+app.get("/settings", appRoutes.home);
 
 var readFile = function(path, encoding) {
 	return function(fn) {

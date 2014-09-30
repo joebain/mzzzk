@@ -58,6 +58,7 @@ gulp.task('font', function() {
 gulp.task('build', ['style', 'script', 'html', 'font']);
 
 gulp.task('watch', ['build'], function() {
+	gulp.watch('node_modules/**/*.js', ['script']);
 	gulp.watch('script/**/*.js', ['script']);
 	gulp.watch('templ/*.hbs', ['script']);
 	gulp.watch('style/*.scss', ['style']);

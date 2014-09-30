@@ -4,12 +4,16 @@ var _ = require("underscore");
 
 var Router = Backbone.Router.extend({
     routes: {
+        "recent": "recent",
+        "queue": "queue",
+        "setting": "setting",
         "song": "songs",
-        "song/:id": "song",
-        "album": "albums",
+        "album": "album",
         "album/:name": "album",
-        "artist": "artists",
-        "artist/:name": "artist"
+        "artist": "artist",
+        "artist/:name": "artist",
+        "playlist": "playlist",
+        "playlist/:name": "playlist"
     },
 
     initialize: function() {

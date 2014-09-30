@@ -4,7 +4,7 @@
   font-size: 24px;
   display: inline-block;
 
-  min-width: 240px;
+  min-width: 300px;
   height: 85px;
   padding: 10px;
   margin: -20px 20px;
@@ -38,5 +38,13 @@
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .mk-song-count {
+    display: inline-block;
+    text-decoration: none;
+    color: $colour-primary-0;
+    width: 60px;
+    text-align: center;
   }
 }
