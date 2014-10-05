@@ -1,0 +1,38 @@
+@import "colours";
+
+.mk-button {
+    padding: 12px 25px;
+    background-color: rgba(0,0,0,0.1);
+    display: inline-block;
+    cursor: pointer;
+    margin: 3px;
+    vertical-align: middle;
+
+    &:hover {
+        box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.8);
+    }
+}
+
+.mk-sub-title {
+    font-size: 24px;
+    border-bottom: solid 2px $colour-primary-1;
+    margin-right: 30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.mk-file-input {
+    color: $colour-primary-0;
+    background: $colour-primary-1;
+    min-width: 200px;
+    height: 1em;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px 5px;
+    cursor: pointer;
+
+    &[contenteditable] {
+        background: white;
+        cursor: text;
+    }
+}

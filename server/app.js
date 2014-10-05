@@ -4,28 +4,37 @@ var router = require("koa-router");
 var fs = require("fs");
 var _ = require("lodash");
 
+var bodyParser = require('koa-body-parser');
+
 var env = require("./env.json");
 
 var scannerRoutes = require("./routes/scanner");
 var appRoutes = require("./routes/app");
+var settingRoutes = require("./routes/setting");
 
 var app = koa();
 
+app.use(bodyParser());
+
 app.use(router(app));
 
-app.get("/scan", scannerRoutes.scan);
+app.get("/scan", scannerRoutes.status);
+app.get("/scan/status", scannerRoutes.status);
+app.post("/scan/start", scannerRoutes.start);
+app.post("/scan/stop", scannerRoutes.stop);
 
 app.get("/", appRoutes.home);
 app.get("/artist", appRoutes.home);
 app.get("/artist/:artist", appRoutes.home);
 app.get("/album", appRoutes.home);
 app.get("/album/:album", appRoutes.home);
-app.get("/songs", appRoutes.home);
+app.get("/song", appRoutes.home);
 app.get("/queue", appRoutes.home);
 app.get("/recent", appRoutes.home);
 app.get("/playlist", appRoutes.home);
 app.get("/playlist/:playlist", appRoutes.home);
-app.get("/settings", appRoutes.home);
+app.get("/setting", settingRoutes.get);
+app.post("/setting", settingRoutes.set);
 
 var readFile = function(path, encoding) {
 	return function(fn) {

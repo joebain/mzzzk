@@ -55,15 +55,15 @@ _.extend(FileMonitor.prototype, {
                     tag.filehash = tag.size + " - " + tag.src;
                     tag.taghash = tag.artist + " - " + tag.album + " - " + tag.track + " - " + tag.title;
 
-                    var songs = yield couch.rawGet.bind(couch, env.db.name, "_design/songs/_view/by-filehash", {key: tag.filehash});
-                    if (!songs || songs.data.rows.length === 0) {
+                    var songs = yield couch.rawGet.bind(couch, env.db.name, "_design/songs/_view/by-filehash", {key: tag.filehash, include_docs: true});
+                    if (!songs || songs.data.rows.length === 0 || !songs.data.rows[0].doc) {
                         console.log("inserting song");
                         tag._id = (yield couch.uniqid.bind(couch, 1))[0];
                         yield couch.insert.bind(couch, env.db.name, tag);
                         console.log("inserted song");
                     } else {
                         console.log("song already in db");
-                        songData = songs.data.rows[0].value;
+                        songData = songs.data.rows[0].doc;
                         if (tag.taghash !== songData.taghash || tag.filehash !== songData.filehash) {
                             console.log("hashes have changed, updating");
                             tag._id = songData._id;

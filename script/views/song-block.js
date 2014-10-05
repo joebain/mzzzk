@@ -35,7 +35,7 @@ var SongBlock = Backbone.View.extend({
         var hue = Math.floor(Util.strToUniformInt(data.title) * 360);
         
         this.$el.css("background-color", "hsl("+hue+", 40%, 50%)");
-        this.$el.css("color", "hsl("+((hue+120)%360)+", 70%, 80%)");
+//        this.$el.css("color", "hsl("+((hue+120)%360)+", 40%, 30%)");
 
         var size = Util.getFontSizeToFit(data.title, 200);
         while (size > 100) {

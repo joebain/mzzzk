@@ -23,13 +23,16 @@ var AppView = Backbone.View.extend({
 
         this.currentListView = this.albumsView;
 
+        this.settingView = options.settingView;
+
         this.listenTo(this.router, "route", this.onRoute);
 
         this.pageMap = {
             "songs": this.songsView,
             "artist": this.artistsView,
             "album": this.albumsView,
-            "queue": this.queueView
+            "queue": this.queueView,
+            "setting": this.settingView
         };
 	},
 

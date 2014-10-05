@@ -1,6 +1,8 @@
 var Backbone = require("backbone");
 require("couchback");
 
+var Postman = require("../postman");
+
 var SongBlock = require("./song-block");
 
 var SongBlocks = Backbone.Couch.Collection.extend({
@@ -15,6 +17,7 @@ var SongBlocks = Backbone.Couch.Collection.extend({
     initialize: function(models, options) {
         this.couch_view = options.couch_view;
         this.sub_attr = options.sub_attr;
+        this.listenTo(Postman, "scanner:complete", this.fetch);
     },
 
     parse: function(resp) {

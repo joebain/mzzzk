@@ -11,6 +11,9 @@ var SongBlocks = require("./models/song-blocks");
 
 var SongBlocksView = require("./views/song-blocks");
 
+var Setting = require("./models/setting");
+var SettingView = require("./views/setting");
+
 var Router = require("./router");
 
 var PlayerView = require("./views/player");
@@ -27,6 +30,9 @@ $(function() {
 
     var detailSongs = new Songs();
     var detailSongsView = new SongsView({collection: detailSongs});
+
+    var setting = new Setting();
+    var settingView = new SettingView({model: setting});
 
     var navView = new NavView();
 
@@ -46,13 +52,15 @@ $(function() {
         playerView: playerView,
         detailSongsView: detailSongsView,
         detailSongs: detailSongs,
-        queueView: queueView
+        queueView: queueView,
+        settingView: settingView
     });
 	appView.render();
 
     songs.fetch();
     albums.fetch();
     artists.fetch();
+    setting.fetch();
 
     Backbone.history.start({pushState: true, root: "/"});
     router.trigger("route", Backbone.history.fragment);

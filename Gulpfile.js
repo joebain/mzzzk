@@ -67,5 +67,13 @@ gulp.task('watch', ['build'], function() {
 });
 
 gulp.task('serve', ['watch'], function () {
-  nodemon({ watch: ['server/'], script: 'server/app.js', ext: 'html js hbs scss png', nodeArgs: [/*"--debug", */"--harmony"] })
+  nodemon({
+      watch: ['server/'],
+      script: 'server/app.js',
+      ext: 'html js hbs scss png',
+      nodeArgs: [
+          "--debug",
+          "--harmony"
+      ]
+  })
 })
