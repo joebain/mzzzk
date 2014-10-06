@@ -14,7 +14,7 @@ var SongBlocksView = require("./views/song-blocks");
 var Setting = require("./models/setting");
 var SettingView = require("./views/setting");
 
-var Router = require("./router");
+var router = require("./router").instance();
 
 var PlayerView = require("./views/player");
 
@@ -36,15 +36,11 @@ $(function() {
 
     var navView = new NavView();
 
-    var router = new Router();
-
     var playerView = new PlayerView();
 
-    var queueView = new SongsView;
 
 
 	var appView = new AppView({
-        router: router,
         navView: navView,
         songsView: songsView,
         artistsView: artistsView,
@@ -52,7 +48,6 @@ $(function() {
         playerView: playerView,
         detailSongsView: detailSongsView,
         detailSongs: detailSongs,
-        queueView: queueView,
         settingView: settingView
     });
 	appView.render();

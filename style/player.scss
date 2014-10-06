@@ -4,15 +4,30 @@
   font-size: 24px;
   display: inline-block;
 
-  min-width: 300px;
-  height: 85px;
+  width: 400px;
+  height: 500px;
   padding: 10px;
   margin: -20px 20px;
+  margin-top: -430px;
   overflow: hidden;
   position: relative;
+  z-index: 1;
+
+  &.mk-expanded {
+      margin-top: -20px;
+  }
+
+  transition: margin 1s;
 
   background-color: $colour-primary-1;
   color: $colour-primary-0;
+
+  .mk-queue {
+      height: 400px;
+      overflow-y: auto;
+      position: relative;
+      margin: 0px -10px;
+  }
 
   .mk-prev-button,
   .mk-next-button,
@@ -31,7 +46,13 @@
   }
 
   .mk-player-row-top {
-    margin-top: -10px;
+      position: absolute;
+      bottom: 40px;
+      white-space: nowrap;
+
+      &.mk-animate {
+          animation: marquee 10s linear infinite alternate;
+      }
   }
   .mk-player-row-bottom {
     position:absolute;
@@ -44,7 +65,14 @@
     display: inline-block;
     text-decoration: none;
     color: $colour-primary-0;
-    width: 60px;
-    text-align: center;
+    position:absolute;
+    right: 20px;
+    bottom: 8px;
   }
+}
+
+@keyframes marquee {
+    0%   { transform: translate(0, 0); }
+    30%   { transform: translate(0, 0); }
+    100% { transform: translate(calc(400px - 100%), 0); }
 }

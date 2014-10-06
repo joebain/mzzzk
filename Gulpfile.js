@@ -45,17 +45,12 @@ gulp.task('sprite', function() {
 	.pipe(gulpif('*.scss', gulp.dest('./style/')));
 });
 
-gulp.task('html', function() {
-	return gulp.src('index.html')
+gulp.task('resources', function() {
+	return gulp.src('res/**/*')
 	.pipe(gulp.dest(buildDir));
 });
 
-gulp.task('font', function() {
-	return gulp.src('font/**/*')
-	.pipe(gulp.dest(buildDir + "/font"));
-});
-
-gulp.task('build', ['style', 'script', 'html', 'font']);
+gulp.task('build', ['style', 'script', 'resources']);
 
 gulp.task('watch', ['build'], function() {
 	gulp.watch('node_modules/**/*.js', ['script']);
@@ -63,7 +58,7 @@ gulp.task('watch', ['build'], function() {
 	gulp.watch('templ/*.hbs', ['script']);
 	gulp.watch('style/*.scss', ['style']);
 	gulp.watch('img/*.png', ['sprite', 'style']);
-	gulp.watch('index.html', ['html']);
+	gulp.watch('res/**/*', ['resources']);
 });
 
 gulp.task('serve', ['watch'], function () {

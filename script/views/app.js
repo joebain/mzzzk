@@ -2,14 +2,14 @@ var Backbone = require("backbone");
 var $ = require("jquery");
 Backbone.$ = $;
 
+var router = require("../router").instance();
+
 var template = require("../../templ/app.hbs");
 
 var AppView = Backbone.View.extend({
     el: "body",
 
 	initialize: function(options) {
-        this.router = options.router;
-
         this.songsView = options.songsView;
         this.albumsView = options.albumsView;
         this.artistsView = options.artistsView;
@@ -19,19 +19,17 @@ var AppView = Backbone.View.extend({
         this.detailSongs = options.detailSongs;
 
         this.playerView = options.playerView;
-        this.queueView = options.queueView;
 
         this.currentListView = this.albumsView;
 
         this.settingView = options.settingView;
 
-        this.listenTo(this.router, "route", this.onRoute);
+        this.listenTo(router, "route", this.onRoute);
 
         this.pageMap = {
             "songs": this.songsView,
             "artist": this.artistsView,
             "album": this.albumsView,
-            "queue": this.queueView,
             "setting": this.settingView
         };
 	},
@@ -51,13 +49,15 @@ var AppView = Backbone.View.extend({
                 this.detailSongs.reset();
                 this.detailSongs.fetch({key: page, value: item});
             }
-            if (page === "queue") {
-                this.queueView.setCollection(this.playerView.collection);
-            }
-
             view.render();
             this.render();
         }
+        if (page === "queue") {
+            this.playerView.slideOut();
+        } else {
+            this.playerView.slideIn();
+        }
+
     },
 
 	render: function() {

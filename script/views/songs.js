@@ -11,6 +11,7 @@ var SongsView = Backbone.View.extend({
         if (this.collection) {
             this.listenTo(this.collection, "sync", this.render);
         }
+        this.reduced = !!options.reduced;
     },
 
     setCollection: function(collection) {
@@ -24,13 +25,13 @@ var SongsView = Backbone.View.extend({
     },
 
     render: function() {
-        this.el.innerHTML = template();
+        this.el.innerHTML = template({reduced: this.reduced});
 
         this.songListEl = this.$el.find(".mk-songs-song-list");
 
         if (this.collection) {
             this.collection.each((function(song) {
-                var songView = new SongView({model: song});
+                var songView = new SongView({model: song, reduced: this.reduced});
                 songView.render();
                 this.songListEl.append(songView.$el);
             }).bind(this));

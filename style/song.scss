@@ -15,6 +15,14 @@
             color: $colour-secondary-1-0;
             background-color: $colour-secondary-1-1;
         }
+
+        &.mk-reduced {
+            font-size: 14px;
+            display: table-cell;
+            padding: 2px 5px;
+            margin: 0;
+            vertical-align: middle;
+        }
     }
 
     .mk-song-edit-toggle,

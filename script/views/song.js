@@ -14,21 +14,24 @@ var SongView = Backbone.View.extend({
         "click": "playSong"
     },
 
-    initialize: function() {
+    initialize: function(options) {
         this.listenTo(this.model, "sync", this.render);
 
         this.editMode = false;
+        this.reduced = !!options.reduced;
     },
 
     render: function() {
         var data = this.model.toJSON();
         data.editMode = this.editMode;
+        data.reduced = this.reduced;
         this.el.innerHTML = template(data);
     },
 
     playSong: function() {
       Postman.trigger("player:setCollection", this.model.collection);
       Postman.trigger("player:setSong", this.model);
+      return false;
     },
 
     toggleEditMode: function(e) {

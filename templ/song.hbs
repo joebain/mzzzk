@@ -1,12 +1,14 @@
-<span {{#if editMode}}contenteditable{{/if}} class="mk-song-artist">{{artist}}</span>
-<span {{#if editMode}}contenteditable{{/if}} class="mk-song-album">{{album}}</span>
-<span {{#if editMode}}contenteditable{{/if}} class="mk-song-track">{{track}}</span>
-<span {{#if editMode}}contenteditable{{/if}} class="mk-song-title">{{title}}</span>
+<span {{#if editMode}}contenteditable{{/if}} class="mk-song-artist{{#if reduced}} mk-reduced{{/if}}">{{artist}}</span>
+<span {{#if editMode}}contenteditable{{/if}} class="mk-song-album{{#if reduced}} mk-reduced{{/if}}">{{album}}</span>
+<span {{#if editMode}}contenteditable{{/if}} class="mk-song-track{{#if reduced}} mk-reduced{{/if}}">{{track}}</span>
+<span {{#if editMode}}contenteditable{{/if}} class="mk-song-title{{#if reduced}} mk-reduced{{/if}}">{{title}}</span>
 
-{{#if editMode}}
-<span class="mk-song-edit-toggle">Cancel</span>
-<span class="mk-song-save">Save</span>
-{{else}}
-<span class="mk-song-edit-toggle">Edit</span>
-{{/if}}
-<span class="mk-song-delete">Delete</span>
+{{#unless reduced}}
+    {{#if editMode}}
+        <span class="mk-song-edit-toggle">Cancel</span>
+        <span class="mk-song-save">Save</span>
+    {{else}}
+        <span class="mk-song-edit-toggle">Edit</span>
+    {{/if}}
+    <span class="mk-song-delete">Delete</span>
+{{/unless}}

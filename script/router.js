@@ -35,4 +35,11 @@ var Router = Backbone.Router.extend({
     }
 });
 
+Router.instance = function() {
+    if (!Router._instance) {
+        Router._instance = new Router;
+    }
+    return Router._instance;
+};
+
 module.exports = Router;
