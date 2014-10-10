@@ -58,5 +58,4 @@ $(function() {
     setting.fetch();
 
     Backbone.history.start({pushState: true, root: "/"});
-    router.trigger("route", Backbone.history.fragment);
 });

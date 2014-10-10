@@ -1,10 +1,16 @@
 <div class="mk-app">
 	<div class="mk-app-title">
-		mzzzk <span class="mk-app-sub-title">music for your ear</span>
-    <div class="mk-app-player"></div>
-	</div>
+        {{#unless mobile}}
+		<a href="/">m</a><span class="mk-app-sub-title">zzzk</span>
+        {{/unless}}
+        <div class="mk-app-player"></div>
+    </div>
+    {{#unless mobile}}
     <div class="mk-app-nav">
     </div>
-    <div class="mk-app-content">
+    {{/unless}}
+    <div class="mk-app-content-current">
+    </div>
+    <div class="mk-app-content-parent">
     </div>
 </div>

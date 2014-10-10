@@ -28,4 +28,8 @@ var measuringContext;
   measuringContext = canvas.getContext("2d");
 })();
 
+
+Util.isMobile = function() {
+    return window.innerWidth < 768;
+}
 module.exports = Util;

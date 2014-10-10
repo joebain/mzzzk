@@ -1,5 +1,10 @@
 @import "colours";
 
+a {
+    text-decoration: none;
+    color: $colour-primary-1;
+}
+
 .mk-button {
     padding: 12px 25px;
     background-color: rgba(0,0,0,0.1);

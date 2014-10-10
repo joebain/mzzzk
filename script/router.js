@@ -4,6 +4,7 @@ var _ = require("underscore");
 
 var Router = Backbone.Router.extend({
     routes: {
+        "": "artist",
         "recent": "recent",
         "queue": "queue",
         "setting": "setting",

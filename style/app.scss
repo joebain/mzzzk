@@ -20,7 +20,8 @@
       font-style: italic;
       font-weight: 100;
       font-size:40px;
-      margin-left: -15px;
+      margin-left: 2px;
+      letter-spacing: 5px;
     }
 
     .mk-app-player {
@@ -30,10 +31,21 @@
   }
 
   @include mobile {
-      .mk-app-nav {
+      .mk-app-nav,
+      .mk-app-content-current,
+      .mk-app-content-parent {
+          position: absolute;
+          top: $header-full-height;
+          bottom: 0px;
+          left: 0px;
+          right: 0px;
+          overflow-x: hidden;
+          overflow-y: auto;
+          background-color: $colour-primary-0;
       }
-
-      .mk-app-content {
+      .mk-app-content-current {
+          z-index: 1;
+          box-shadow: -5px 0px 3px rgba(30,30,30,0.7);
       }
   }
 
@@ -47,7 +59,7 @@
           width: $nav-bar-width;
       }
 
-      .mk-app-content {
+      .mk-app-content-current {
           position:absolute;
 
           top: $header-full-height;
@@ -56,6 +68,9 @@
           left: $nav-bar-width;
 
           overflow: auto;
+      }
+      .mk-app-content-parent {
+          display: none;
       }
   }
 }

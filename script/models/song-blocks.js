@@ -8,7 +8,7 @@ var SongBlock = require("./song-block");
 var SongBlocks = Backbone.Couch.Collection.extend({
     model: SongBlock,
 
-    couch_host: "localhost:5984",
+    couch_host: window.location.hostname + ":5984",
     couch_name: "mzzzk",
     couch_design: "songs",
     couch_list: "group-2",
