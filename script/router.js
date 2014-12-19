@@ -33,6 +33,10 @@ var Router = Backbone.Router.extend({
                 Backbone.history.navigate(fragment, true);
             }
         });
+
+        Backbone.history.on("route", function(router, route) {
+            console.log("route: " + route);
+        });
     }
 });
 

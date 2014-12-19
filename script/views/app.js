@@ -42,6 +42,14 @@ var AppView = Backbone.View.extend({
 
         this.lastTouches = [];
         this.lastTouchesLength = 5;
+
+        this.max_v = 100;
+        this.acceleration = 0.9;
+
+        this.pageOffsetX = 0;
+        this.pageOffsetY = 0;
+
+        this.pageDragMin = 50;
 	},
 
     onRoute: function(page, args) {
@@ -77,35 +85,6 @@ var AppView = Backbone.View.extend({
         this.currentView.render();
 
         this.render();
-        
-        /*
-        this.lastPage = page;
-        this.lastItem = item;
-        var view;
-        if (item) {
-            view = this.detailSongsView;
-        } else {
-            view = this.pageMap[page];
-        }
-        if (view) {
-            this.currentListView = view;
-
-            if (item) {
-                this.detailSongs.reset();
-                this.detailSongs.fetch({key: page, value: item});
-            }
-            if (item && this.contentEl1.empty()) {
-                this.renderPageUp();
-            }
-            view.render();
-            this.render();
-        }
-        if (page === "queue") {
-            this.playerView.slideOut();
-        } else {
-            this.playerView.slideIn();
-        }
-        */
     },
 
 	render: function() {
@@ -116,12 +95,7 @@ var AppView = Backbone.View.extend({
         if (!this.contentEl) {
             this.contentEl = this.$el.find(".mk-app-content-current");
             this.parentContentEl = this.$el.find(".mk-app-content-parent");
-        }/* else {
-            var tmpContentEl = this.contentEl2;
-            this.contentEl2 = this.contentEl1;
-            this.contentEl1 = tmpContentEl;
-            this.contentEl1.empty();
-        }*/
+        }
         else {
             this.parentContentEl.empty();
             this.contentEl.empty();
@@ -151,13 +125,12 @@ var AppView = Backbone.View.extend({
         var oe = e.originalEvent;
         if (!this.touchid) {
             this.touchid = oe.touches[0].identifier;
-            this.touchx = oe.touches[0].pageX;
-            this.touchy = oe.touches[0].pageY;
+            this.touchx = oe.touches[0].pageX - this.pageOffsetX;
+            this.touchy = oe.touches[0].pageY - this.pageOffsetY;
+            console.log("page offset x: " + this.pageOffsetX);
+            console.log("touchx: " + this.touchx);
             this.toucht = Date.now();
-
-//            return false;
         }
-//        return true;
     },
 
     touchEnd: function(e) {
@@ -166,58 +139,91 @@ var AppView = Backbone.View.extend({
             if (oe.changedTouches[t].identifier === this.touchid) {
                 this.touchid = undefined;
 
-                this.vx = 0;
-                this.vy = 0;
-                for (var i = 0 ; i < this.lastTouches.length ; i++) {
-                    this.vx += this.lastTouches[i].dx / this.lastTouches[i].dt;
-                    this.vy += this.lastTouches[i].dy / this.lastTouches[i].dt;
-                }
-                this.dx = this.touchx - oe.changedTouches[t].pageX;
-                this.dy = this.touchy - oe.changedTouches[t].pageY;
-                this.vx *= -1;
-                this.vy *= -1;
-                this.vx /= this.lastTouches.length;
-                this.vy /= this.lastTouches.length;
+                this._recordInLastTouches(oe.changedTouches[t]);
+                var vel = this._calculateVelocityOfTouch();
+
+                this.vx = vel.x;
+                this.vy = vel.y;
+
                 this.last_t = Date.now();
-                if (this.last_t - this.toucht > 300) {
+                if (this.last_t - this.toucht > 300) { // prevent glancing swipes
                     requestAnimationFrame(this.animatePage.bind(this));
                 } else {
-                    this.contentEl.css("transform", "translateX(0px)");   
+                    var snapX = this.dx > -window.innerWidth*0.5 ? 0 : window.innerWidth+10;
+                    this._setPagePos(snapX, 0);
                 }
+                this.pageDragging = false;
                 return;
             }
         }
     },
 
+    _calculateVelocityOfTouch: function() {
+        var vel = {x: 0, y: 0};
+
+        for (var i = 0 ; i < this.lastTouches.length ; i++) {
+            vel.x += this.lastTouches[i].dx / this.lastTouches[i].dt;
+            vel.y += this.lastTouches[i].dy / this.lastTouches[i].dt;
+        }
+        vel.x /= this.lastTouches.length;
+        vel.y /= this.lastTouches.length;
+        if (this.vx === Infinity || isNaN(this.vx)) {
+            this.vx = 0;
+        }
+        if (this.vy === Infinity || isNaN(this.vy)) {
+            this.vy = 0;
+        }
+
+        vel.x *= -1;
+        vel.y *= -1;
+
+        return vel;
+    },
+
+    _recordInLastTouches: function(touch) {
+        var x = touch.pageX;
+        var y = touch.pageY;
+        var time = Date.now();
+        var lastTouch = this.lastTouches.length > 0 ? this.lastTouches[this.lastTouches.length-1] : {x:x, y: y, t: time};
+        this.lastTouches.push({
+            x: x,
+            y: y,
+            t: time,
+            dx: x - lastTouch.x,
+            dy: y - lastTouch.y,
+            dt: time - lastTouch.t
+        });
+        if (this.lastTouches.length > this.lastTouchesLength) {
+            this.lastTouches.shift();
+        }
+    },
+
+
+    _setPagePos: function(x,y) {
+        if (isNaN(x) || isNaN(y)) return;
+        this.pageOffsetX = x;
+        this.pageOffsetY = y;
+        this.contentEl.css("transform", "translate(" + x + "px, " + y + "px)");
+    },
 
     touchMove: function(e) {
         var oe = e.originalEvent;
         for (var t = 0 ; t < oe.touches.length ; t++) {
             if (oe.touches[t].identifier === this.touchid) {
-                var x = oe.touches[t].pageX;
-                var y = oe.touches[t].pageY;
-                var time = Date.now();
-                var lastTouch = this.lastTouches.length > 0 ? this.lastTouches[this.lastTouches.length-1] : {x:x, y: y, t: time};
-                this.lastTouches.push({
-                    x: x,
-                    y: y,
-                    t: time,
-                    dx: x - lastTouch.x,
-                    dy: y - lastTouch.y,
-                    dt: time - lastTouch.t
-                });
-                if (this.lastTouches.length > this.lastTouchesLength) {
-                    this.lastTouches.shift();
+                this._recordInLastTouches(oe.touches[t]);
+
+                this.dx = this.touchx - oe.touches[t].pageX;
+                this.dy = this.touchy - oe.touches[t].pageY;
+
+                console.log("dx: " + this.dx);
+                if (this.dx < -this.pageDragMin && this.parentView && !this.pageDragging) {
+                    this.pageDragging = true;
+                    this.touchx -= this.dx;
+                    console.log("page dragging");
                 }
-
-                var dx = this.touchx - oe.touches[t].pageX;
-                var dy = this.touchy - oe.touches[t].pageY;
-
-                if (dx < -20 && this.parentView) {
-                    this.contentEl.css("transform", "translateX(" + -dx + "px)");
+                else if (this.dx < 0 && this.pageDragging) {
+                    this._setPagePos(-this.dx, 0);
                     return false;
-                } else {
-                    return;
                 }
             }
         }
@@ -228,28 +234,33 @@ var AppView = Backbone.View.extend({
         var dt = t - this.last_t;
         this.last_t = t;
 
-        // accelerate to wherever we are going
-        this.vx *= 1.05;
-        this.vy *= 1.05;
-        var max_v = 100;
-        if (Math.abs(this.vx) > max_v) {
-            this.vx = (Math.abs(this.vx)/this.vx) * max_v;
+        if (this.dx > -window.innerWidth * 0.5) {
+            this.vx += 0.05;
+        } else {
+            this.vx -= 0.05;
         }
-        if (Math.abs(this.vy) > max_v) {
-            this.vy = (Math.abs(this.vy)/this.vy) * max_v;
+
+        if (Math.abs(this.vx) > this.max_v) {
+            this.vx = (this.vx > 0 ? 1 : -1) * this.max_v;
+        }
+        if (Math.abs(this.vy) > this.max_v) {
+            this.vy = (this.vy > 0 ? 1 : -1) * this.max_v;
         }
 
         this.dx += this.vx * dt;
         this.dy += this.vy * dt;
 
-        this.contentEl.css("transform", "translateX(" + -this.dx + "px)");
+        this._setPagePos(-this.dx, 0);
         if (this.dx <= -window.innerWidth) {
             if (this.parentRoute) {
                 router.navigate(this.parentRoute, {trigger: true});
+                this._setPagePos(0, 0);
             }
+        } else if (this.dx < -window.innerWidth) {
+            this._setPagePos(window.innerWidth+10, 0);
         } else if (this.dx >= 0) {
-            this.contentEl.css("transform", "translateX(0px)");   
-        } else {
+            this._setPagePos(0, 0);
+        } else if (Math.abs(this.vx) > 0.001 || Math.abs(this.vy) > 0.001) {
             requestAnimationFrame(this.animatePage.bind(this));
         }
     },
